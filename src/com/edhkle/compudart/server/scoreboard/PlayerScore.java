@@ -17,20 +17,26 @@ public class PlayerScore {
         
     }
     
-    public void addDart(String value) {
-        DartValue dart = DartScoreMap.dartValue(value);
+    public void addDart(DartValue dart, boolean opponent) {
         boolean closed = dMap.hitDart(dart);
-        if(closed) {
+        if(closed && !opponent) {
             score += dart.getScore();
         }
     }
     
-    public void removeDart(String value) {
-        DartValue dart = DartScoreMap.dartValue(value);
+    public void removeDart(DartValue dart, boolean opponent) {
         boolean closed = dMap.removeDart(dart);
-        if(!closed && score > 0) {
+        if(closed && score > 0 && !opponent) {
             score -= dart.getScore();
         }
+    }
+    
+    public boolean isDartClosed(DartValue dart) {
+        boolean closed = false;
+        if(dMap.get(dart) >= 3) {
+            closed = true;
+        }
+        return closed;
     }
     
     public DartScoreMap getDartMap() {

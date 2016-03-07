@@ -5,6 +5,7 @@
  */
 package com.edhkle.compudart.server.scoreboard;
 
+import com.edhkle.compudart.server.ScoreCommand;
 import java.util.UUID;
 
 /**
@@ -32,8 +33,8 @@ public class Scoreboard {
 
     public PlayerScore getPlayerScore(int i) {
         // convert player number to index (1,2 => 0,1)
-        int pNum = i--;
-        if(pNum < 0 || pNum > 1) {
+        i--;
+        if(i < 0 || i > 1) {
             return null;
         }
         return playerScores[i];
@@ -47,17 +48,39 @@ public class Scoreboard {
         this.over = over;
     }
     
-    public void scoreDart(int playerNum, String dart, int num) {
-        PlayerScore p = getPlayerScore(playerNum);
-        for(int i=0; i < num; i++) {
-            p.addDart(dart);
+    public void processScoreCommand(ScoreCommand c) throws GameOverException {
+        if(c.getAction().equalsIgnoreCase("score")) {
+            scoreDart(c);
+            checkGameOver();
+        } else if(c.getAction().equalsIgnoreCase("unscore")) {
+            unscoreDart(c);
         }
     }
     
-    public void unscoreDart(int playerNum, String dart, int num) {
-        PlayerScore p = getPlayerScore(playerNum);
-        for(int i=0; i < num; i++) {
-            p.removeDart(dart);
+    private void scoreDart(ScoreCommand c) throws GameOverException {
+        PlayerScore p = getPlayerScore(c.getPlayerIndex());
+        boolean closed = getPlayerScore(getOtherPlayerId(c.getPlayerIndex())).isDartClosed(c.getdTarget());
+        for(int i=0; i < c.getdMul(); i++) {
+            p.addDart(c.getdTarget(), closed);
+        }
+    }
+    
+    private void unscoreDart(ScoreCommand c) {
+        PlayerScore p = getPlayerScore(c.getPlayerIndex());
+        boolean closed = getPlayerScore(getOtherPlayerId(c.getPlayerIndex())).isDartClosed(c.getdTarget());
+        for(int i=0; i < c.getdMul(); i++) {
+            p.removeDart(c.getdTarget(), closed);
+        }
+    }
+    
+    private static int getOtherPlayerId(int i) {
+        return ((--i) ^ 1) + 1;
+    }
+
+    private void checkGameOver() throws GameOverException {
+        boolean gameOver = false;
+        if(gameOver == true) {
+            throw new GameOverException();
         }
     }
 }

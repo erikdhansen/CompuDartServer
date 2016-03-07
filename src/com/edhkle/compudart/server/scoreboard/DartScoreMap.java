@@ -79,4 +79,8 @@ public class DartScoreMap extends HashMap<DartValue,Integer> {
         }
         return d;
     }
+    
+    public boolean isClosed(DartValue d) {
+        return (this.get(d) >= 3);
+    }
 }
