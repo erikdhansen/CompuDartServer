@@ -5,70 +5,51 @@
  */
 package com.edhkle.compudart.server.scoreboard;
 
-import static com.edhkle.compudart.server.scoreboard.DART_VALUE.D0;
-import static com.edhkle.compudart.server.scoreboard.DART_VALUE.D15;
-import static com.edhkle.compudart.server.scoreboard.DART_VALUE.D16;
-import static com.edhkle.compudart.server.scoreboard.DART_VALUE.D17;
-import static com.edhkle.compudart.server.scoreboard.DART_VALUE.D18;
-import static com.edhkle.compudart.server.scoreboard.DART_VALUE.D19;
-import static com.edhkle.compudart.server.scoreboard.DART_VALUE.D20;
-import static com.edhkle.compudart.server.scoreboard.DART_VALUE.DC;
+import static com.edhkle.compudart.server.scoreboard.DartValue.D0;
+import static com.edhkle.compudart.server.scoreboard.DartValue.D15;
+import static com.edhkle.compudart.server.scoreboard.DartValue.D16;
+import static com.edhkle.compudart.server.scoreboard.DartValue.D17;
+import static com.edhkle.compudart.server.scoreboard.DartValue.D18;
+import static com.edhkle.compudart.server.scoreboard.DartValue.D19;
+import static com.edhkle.compudart.server.scoreboard.DartValue.D20;
+import static com.edhkle.compudart.server.scoreboard.DartValue.DC;
 import java.util.HashMap;
 
- enum DART_VALUE {
-    D0(0),
-    D15(15),
-    D16(16),
-    D17(17),
-    D18(18),
-    D19(19),
-    D20(20),
-    DC(25);
-    
-    int score;
-    
-    DART_VALUE(int score) {
-        this.score = score;
-    }
-    
-    public int getScore() {
-        return score;
-    }
-}
+
 /**
  *
  * @author ehansen
  */
-public class DartScoreMap extends HashMap<DART_VALUE,Integer> {
+public class DartScoreMap extends HashMap<DartValue,Integer> {
     
     public DartScoreMap() {
-        this.put(DART_VALUE.D15, 0);
-        this.put(DART_VALUE.D16, 0);
-        this.put(DART_VALUE.D17, 0);
-        this.put(DART_VALUE.D18, 0);
-        this.put(DART_VALUE.D19, 0);
-        this.put(DART_VALUE.D20, 0);
-        this.put(DART_VALUE.DC, 0);
+        this.put(DartValue.D15, 0);
+        this.put(DartValue.D16, 0);
+        this.put(DartValue.D17, 0);
+        this.put(DartValue.D18, 0);
+        this.put(DartValue.D19, 0);
+        this.put(DartValue.D20, 0);
+        this.put(DartValue.DC, 0);
     }
 
-    public boolean hitDart(DART_VALUE dart) {
+    public boolean hitDart(DartValue dart) {
         int val = this.get(dart);
         this.put(dart, ++val);
         return(this.get(dart) > 3);
     }
     
-    public boolean removeDart(DART_VALUE dart) {
+    public boolean removeDart(DartValue dart) {
         int val = this.get(dart);
         this.put(dart, --val);
         return(this.get(dart) >= 3);
     }
     
-    public int getDart(DART_VALUE dart) {
+    public int getDart(DartValue dart) {
         return this.get(dart);
     }
     
-    public static DART_VALUE dartValue(String value) {
-        DART_VALUE d = D0;
+    public static DartValue dartValue(String value) {
+        DartValue d = D0;
         if(value.equalsIgnoreCase("15")) {
             d = D15;
         }

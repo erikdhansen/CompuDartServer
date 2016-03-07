@@ -5,7 +5,9 @@
  */
 package com.edhkle.compudart.server;
 
+import com.edhkle.compudart.server.scoreboard.Scoreboard;
 import java.io.Console;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -15,29 +17,42 @@ import java.util.logging.Logger;
 public class Server {
     final static Logger log = Logger.getLogger(Server.class.getName());
     static Console c = System.console();
+    Scoreboard scoreboard;
     
     public Server() {
+        scoreboard = new Scoreboard();
+        
     }
     
     public void processCommand(Command c) {
-        
+        log.info("Processing command: " + c.toString());
     }
+
+    public static String prompt() {
+        c.printf("CompuDartServer> ");
+        return c.readLine();        
+    }
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         Server server = new Server();
-        Command command;
+        Command command = null;
         while(true) {
-            String input = c.readLine();
+            String input = prompt();
             if(input.equalsIgnoreCase("quit")) {
-                break;
+                c.printf("Bye\n");
+                System.exit(0);
             } else {
-                command = new Command(input);
+                try {
+                    command = new Command(server.scoreboard.getGameId().toString().concat(" ").concat(input));
+                    server.processCommand(command);
+                } catch (CompuDartException e) {
+                    log.log(Level.SEVERE, "Invalid command!", e);
+                }
             }
-            server.processCommand(command);
         }
-        c.printf("Bye");
     }
     
 }

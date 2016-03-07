@@ -5,9 +5,6 @@
  */
 package com.edhkle.compudart.server.scoreboard;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  * @author ehansen
@@ -21,7 +18,7 @@ public class PlayerScore {
     }
     
     public void addDart(String value) {
-        DART_VALUE dart = DartScoreMap.dartValue(value);
+        DartValue dart = DartScoreMap.dartValue(value);
         boolean closed = dMap.hitDart(dart);
         if(closed) {
             score += dart.getScore();
@@ -29,7 +26,7 @@ public class PlayerScore {
     }
     
     public void removeDart(String value) {
-        DART_VALUE dart = DartScoreMap.dartValue(value);
+        DartValue dart = DartScoreMap.dartValue(value);
         boolean closed = dMap.removeDart(dart);
         if(!closed && score > 0) {
             score -= dart.getScore();
